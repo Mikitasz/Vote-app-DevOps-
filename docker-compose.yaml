@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  web:
+    image: mikitasz/golang-vote-app:scratch
+    environment:
+      DB_HOST: db
+      DB_NAME: vote_app
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: mysecret
+    ports:
+      - 80:8080
+    networks:
+      - vote-app
+  db:
+    image: postgres:12.19-alpine3.20
+    environment:
+      POSTGRES_PASSWORD: mysecret
+      POSTGRES_DB: vote_app
+    volumes:
+      - database:/var/lib/postgresql/data/
+    networks:
+      - vote-app
+
+volumes:
+  database:
+
+networks:
+  vote-app:
+    driver: bridge

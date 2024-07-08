@@ -13,11 +13,12 @@ RUN go build -o vote_app
 
 #STAGE 2:
 
-FROM scratch
+FROM scratch 
 
 WORKDIR /app
 
 COPY --from=builder /app/vote_app .
+COPY --from=builder /app/template ./template
 
 # Define environment variables for the runtime stage
 ENV DB_NAME=vote_app \
