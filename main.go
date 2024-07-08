@@ -3,10 +3,11 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 	"net/http"
-
-	_ "github.com/lib/pq"
+	"os"
 )
 
 var db *sql.DB
@@ -18,12 +19,20 @@ type Vote struct {
 
 func main() {
 	var err error
-	connStr := "user=postgres dbname=vote_app sslmode=disable password=mysecret host=localhost"
+	dbUser := os.Getenv("DB_USER")
+	fmt.Printf("Database User: %s\n", dbUser)
+	connStr := fmt.Sprintf(
+		"user=%s password=%s dbname=%s host=%s port=%s sslmode=disable",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_NAME"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+	)
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	http.HandleFunc("/vote", voteHandler)
 	http.HandleFunc("/votes", getVotesHandler)
 	http.Handle("/", http.FileServer(http.Dir("template")))
