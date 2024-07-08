@@ -22,4 +22,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: mikitasz/golang-vote-app:$(date+%s)
+          tags: mikitasz/golang-vote-app:latest
