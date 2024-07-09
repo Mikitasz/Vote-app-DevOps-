@@ -51,7 +51,7 @@ func initDB() error {
 	createTableQuery := `
 	CREATE TABLE IF NOT EXISTS vote_app (
 		id SERIAL PRIMARY KEY,
-		category VARCHAR(50) NOT NULL UNIQUE,
+		category VARCHAR(50) NOT NULL,
 		votes INTEGER NOT NULL DEFAULT 0
 	);`
 
@@ -60,13 +60,33 @@ func initDB() error {
 		return fmt.Errorf("failed to create table: %v", err)
 	}
 
-	insertCategoriesQuery := `
-	INSERT INTO vote_app (category, votes)
-	VALUES ('dogs', 0), ('cats', 0) ON CONFLICT (category) DO NOTHING;`
-
-	_, err = db.Exec(insertCategoriesQuery)
+	// Check if the initial categories exist
+	var count int
+	err = db.QueryRow("SELECT COUNT(*) FROM vote_app").Scan(&count)
 	if err != nil {
-		return fmt.Errorf("failed to insert initial categories: %v", err)
+		return fmt.Errorf("failed to count rows in vote_app: %v", err)
+
+	}
+	if count == 0 {
+		insertCategoriesQuery := `
+        INSERT INTO vote_app (category, votes)
+        VALUES
+            ('dogs', 0),
+            ('cats', 0);`
+
+		result, err := db.Exec(insertCategoriesQuery)
+		if err != nil {
+			return fmt.Errorf("failed to insert initial categories: %v", err)
+		}
+
+		rowsAffected, err := result.RowsAffected()
+		if err != nil {
+			log.Printf("Error fetching rows affected: %v", err)
+		} else {
+			log.Printf("Rows affected by initial insert: %d", rowsAffected)
+		}
+	} else {
+		log.Println("Initial categories already exist, skipping insert.")
 	}
 
 	return nil

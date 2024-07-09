@@ -2,7 +2,7 @@ version: "3"
 
 services:
   web:
-    image: mikitasz/golang-vote-app:scratch
+    image: mikitasz/golang-vote-app:scratchv1.1
     environment:
       DB_HOST: db
       DB_NAME: vote_app
