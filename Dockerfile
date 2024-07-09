@@ -19,7 +19,7 @@ WORKDIR /app
 
 COPY --from=builder /app/vote_app .
 COPY --from=builder /app/template ./template
-
+COPY main.go .
 # Define environment variables for the runtime stage
 ENV DB_NAME=vote_app \
     DB_HOST=vote_db \
