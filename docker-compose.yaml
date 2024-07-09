@@ -2,7 +2,7 @@ version: "3"
 
 services:
   web:
-    image: mikitasz/golang-vote-app:scratch
+    image: mikitasz/golang-vote-app:latest
     environment:
       DB_HOST: db
       DB_NAME: vote_app
@@ -13,6 +13,8 @@ services:
       - 80:8080
     networks:
       - vote-app
+    depends_on:
+      - db
   db:
     image: postgres:12.19-alpine3.20
     environment:
