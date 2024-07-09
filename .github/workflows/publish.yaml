@@ -20,6 +20,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: test  values in main.go
+        run: cat main.go
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
