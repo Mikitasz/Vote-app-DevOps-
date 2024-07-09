@@ -51,7 +51,7 @@ func initDB() error {
 	createTableQuery := `
 	CREATE TABLE IF NOT EXISTS vote_app (
 		id SERIAL PRIMARY KEY,
-		category VARCHAR(50) NOT NULL,
+		category VARCHAR(50) NOT NULL UNIQUE,
 		votes INTEGER NOT NULL DEFAULT 0
 	);`
 
@@ -62,7 +62,7 @@ func initDB() error {
 
 	insertCategoriesQuery := `
 	INSERT INTO vote_app (category, votes)
-	VALUES ('dogs', 0), ('cats', 0);`
+	VALUES ('dogs', 0), ('cats', 0) ON CONFLICT (category) DO NOTHING;`
 
 	_, err = db.Exec(insertCategoriesQuery)
 	if err != nil {
