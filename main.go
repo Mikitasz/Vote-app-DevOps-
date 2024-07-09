@@ -64,8 +64,7 @@ func initDB() error {
 	INSERT INTO vote_app (category, votes)
 	VALUES
 		('dogs', 0),
-		('cats', 0)
-	ON CONFLICT (category) DO NOTHING;`
+		('cats', 0);`
 
 	_, err = db.Exec(insertCategoriesQuery)
 	if err != nil {
