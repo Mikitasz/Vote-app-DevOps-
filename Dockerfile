@@ -13,7 +13,7 @@ RUN go build -o vote_app
 
 #STAGE 2:
 
-FROM alpine 
+FROM scratch
 
 WORKDIR /app
 
