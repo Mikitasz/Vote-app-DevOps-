@@ -33,12 +33,46 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	err = initDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	http.HandleFunc("/vote", voteHandler)
 	http.HandleFunc("/votes", getVotesHandler)
 	http.Handle("/", http.FileServer(http.Dir("template")))
 
 	log.Println("Server started on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func initDB() error {
+	createTableQuery := `
+	CREATE TABLE IF NOT EXISTS vote_app (
+		id SERIAL PRIMARY KEY,
+		category VARCHAR(50) NOT NULL,
+		votes INTEGER NOT NULL DEFAULT 0
+	);`
+
+	_, err := db.Exec(createTableQuery)
+	if err != nil {
+		return fmt.Errorf("failed to create table: %v", err)
+	}
+
+	insertCategoriesQuery := `
+	INSERT INTO vote_app (category, votes)
+	VALUES
+		('dogs', 0),
+		('cats', 0)
+	ON CONFLICT (category) DO NOTHING;`
+
+	_, err = db.Exec(insertCategoriesQuery)
+	if err != nil {
+		return fmt.Errorf("failed to insert initial categories: %v", err)
+	}
+
+	return nil
 }
 
 func voteHandler(w http.ResponseWriter, r *http.Request) {
