@@ -17,6 +17,7 @@
 - [ ] Implement end-to-end CI/CD pipeline in GitHub Actions
 - [ ] Deploy web app on AWS on EKS using Terraform
 - [ ] Implement monitoring, like Grafana
+- [ ] Implement ingrees-nginx load
 
 ## Environmetn variables
 
@@ -39,7 +40,7 @@ For containerization, I've used a multi-stage [Dockerfile](https://github.com/Mi
 
 To automate building and pushing the Docker image, I've set up [GitHub Actions](https://github.com/Mikitasz/Vote-app-DevOps-/blob/main/.github/workflows/publish.yaml). This workflow simplifies the process of building and pushing the image to the Docker registry.
 
-### Docker-compose
+### Docker-compose (Localy)
 
 This is the [docker-compose.yaml](https://github.com/Mikitasz/Vote-app-DevOps-/blob/main/docker-compose.yaml) file.
 
@@ -51,7 +52,15 @@ To modify variables, edit the `environment` section in the `web` service. By def
       DB_USER: postgres
       DB_PASSWORD: mysecret
 
+To run application:
+`docker-compose up -d`
+
+To down:
+`docker-compose down`
+
 ### Kubernetes
+
+#### Localy using minikube
 
 This is the [kubernetes](https://github.com/Mikitasz/Vote-app-DevOps-/tree/main/kubernetes) folder, containing 4 files:
 
@@ -61,3 +70,6 @@ This is the [kubernetes](https://github.com/Mikitasz/Vote-app-DevOps-/tree/main/
 - **postgresql.yaml**: Includes definitions to deploy the PostgreSQL database.
 
 To modify variables, edit the `secret.yaml` and `configmap.yaml`.
+
+To run the application:
+`kubectl apply -f kubernetes`
