@@ -17,7 +17,7 @@
 - [ ] Implement end-to-end CI/CD pipeline in GitHub Actions
 - [ ] Deploy web app on AWS on EKS using Terraform
 - [ ] Implement monitoring, like Grafana
-- [ ] Implement ingrees-nginx load
+- [x] Implement ingrees-nginx load
 
 ## Environmetn variables
 
