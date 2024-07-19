@@ -57,6 +57,7 @@ kind: Service
 metadata:
   name: vote-service
 spec:
+  type: LoadBalancer
   selector:
     app: vote-app
   ports:
